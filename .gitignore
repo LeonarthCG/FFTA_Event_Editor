@@ -1,0 +1,7 @@
+gen/
+main.build/
+main.dist/
+main.onefile-build/
+*.exe
+*.pyc
+*.xml

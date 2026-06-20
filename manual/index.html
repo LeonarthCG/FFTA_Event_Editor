@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FFTA Event Editor Manual</title>
+</head>
+<link rel="stylesheet" href="styles.css">
+<script>
+    function copyBlock(id) {
+        var element = document.getElementById(id);
+        navigator.clipboard.writeText(element.innerText)
+    }
+</script>
+<body>
+<hr>
+    <h1>Contents</h1>
+    <ul>
+        <li><a href="#1">What can this tool do?</a>
+            <ul>
+                <li><a href="#1.1">Events tab</a></li>
+                <li><a href="#1.2">Scripts tab</a></li>
+            </ul>
+        </li>
+        <li><a href="#2">How to create a project</a></li>
+        <li><a href="#3">Example event</a></li>
+        <li><a href="#4">How to export a project</a></li>
+        <li>TODO: Instruction sets</li>
+    </ul>
+    <hr>
+    <h1 id="1">What can this tool do?</h1>
+        <p>In short, FFTA Event Editor con extract event data from a FFTA ROM. It then allows you to edit this data and produce a modified ROM.</p>
+        <p>Through this process, the cutscenes in the game can be altered or completely rewritten. This includes everything from the lines each character say to the map the events take place in, the movements the characters perform and the conditions under which the events happen in the first place. Therefore, by using this tool it is possible to create a fully custom story as well as missions with custom win conditions.</p>
+        <p>Once a project is created or loaded, there are two tabs that can be accessed:</p>
+        <h2 id="1.1">Events tab</h2>
+            <p><img src="1.1.png" alt="The 'Events' tab is selected. The script (1) and scene (0) properties for the event can be seen and edited."></p>
+            <p>Through the events tab, the user can define which script and scene is to be executed when an event is triggered.</p>
+            <p>This is the simplest tab, which controls the topmost level of event execution. When a new game is started, Event 1 will run.</p>
+            <p>When an event runs, a specific scene of a specific script plays.</p>
+            <p>Other than when a new game is started, conditionals determine when a new event is triggered.</p>
+        <h2 id="1.2">Scripts tab</h2>
+            <p><img src="1.2.png" alt="The 'Scripts' tab is selected. The script's body, scenes, string and conditionals can be selected for editing. A string has been selected and the tabs for the different languages can be seen."></p>
+            <p>The scripts tab gives access to the different pieces of data required for a cutscene to function.</p>
+            <p><b>Changing the number of scripts, scenes or strings is not yet supported.</b></p>
+            <h3>Script body</h3>
+            <p>The body contains the code that will be executed for all the script's scenes.</p>
+            <p>By editing this, you can change what happens when each of the scenes plays out.</p>
+            <p><b>Not all script instructions are documented yet.</b></p>
+            <h3>Scenes</h3>
+            <p>Under "Scenes", you can determine which label marks the start of each of the script's scenes.</p>
+            <p>Whenever a scene is played, code will start running from wherever that scene's label is found.</p>
+            <h3>Strings</h3>
+            <p>Strings represent the text that can be displayed in the game.</p>
+            <p>When editing a string, several languages will be available if a European copy of the game was used as the project's base.</p>
+            <p>Other than text, strings feature control codes, which can change how the text is displayed or perform other special actions.</p>
+            <p><b>Not all control codes are documented yet.</b></p>
+            <h3>Conditionals</h3>
+            <p>Conditionals are small scripts that run at specific points during gameplay.</p>
+            <p>These scripts use a different language than that of the body. They determine when the next event should activate.</p>
+            <p>The particular trigger that makes a conditional script run is different for each of the conditional scripts:</p>
+            <dl>
+                <dt><b>Map node reached</b></dt><dd>Whenever the player reaches a node on the world map. This can be an empty node and is not limited to the node the player selected. You can also think of this as triggering whenever an in-game day passes.</dd>
+                <dt><b>Map node selected</b></dt><dd>Whenever the player chooses a travel destination.</dd>
+                <dt><b>Mission accepted</b></dt><dd>Whenever a player gets a mission added to their mission list at the tavern. This is the only type of conditionals available for Script 0, and it is only available for Script 0. These will run whenever a mission is accepted, regardless of game progress.</dd>
+                <dt><b>Turn start</b></dt><dd>Whenever a unit's turn starts, regardless of faction.</dd>
+                <dt><b>Action start</b></dt><dd>Whenever a unit stats performing an action, regardless of faction.</dd>
+                <dt><b>Action end</b></dt><dd>Whenever a unit finishes performing an action, regardless of faction.</dd>
+                <dt><b>Turn end</b></dt><dd>Whenever a unit's turn ends, regardless of faction.</dd>
+                <dt><b>Victory condition met</b></dt><dd>Whenever the victory condition for a mission is met. Keep in mind that not all missions have a victory condition.</dd>
+            </dl>
+            <p><b>Not all conditionals instructions are documented yet.</b></p>
+    <hr>
+    <h1 id="2">How to create a project</h1>
+    <p>Creating a project is very simple. First, locate the File/New Project option and click on it:</p>
+    <p><img src="2.1.png" alt="The 'New Project' option is being selected from the 'File' option in the menu bar."></p>
+    <p>A file dialog will appear. Select your European or American/Australian FFTA backup copy.</p>
+    <p>Once the project has been created, it is recommended to save the result (File/Save Project).</p>
+    <p>Keep in mind that, while the project does not contain the entirety of the ROM data, it does contain the game's cutscene dialogue. This is an asset protected by copyright, and it should not be distributed, meaning you should not send your project files to other users.</p>
+    <p>It is also recommendable to 'Assemble' the data. You can do this through Build/Assemble and, once it is done, save your project. Data will be assembled for every script, but it will only be assembled again if a script changes. Therefore, the first assembly will take a longer time, but future ones should take almost no time.</p>
+    <p>Assembling is necessary both for building an output ROM, which will automatically perform assembly if required. Additionally, it is required to gather labels to use in the Scene editor's dropdown.</p>
+    <hr>
+    <h1 id="3">Example event</h1>
+    <p>In this section, we will see how to implement a simple event cutscene.</p>
+    <p>An event has several components to it, all of which work together to make the cutscene play out. For this tutorial, we will be editing Script 1, which is invoked by Event 1.</p>
+    <p>We will modify the body, some strings, as well as some conditionals. As we make the changes, we will also comment on them.</p>
+    <br/>
+    <p>First, replace the Script 1's Body with the following script:</p>
+    <div class="codeblock">
+        <button onclick="copyBlock('body')">Copy to Clipboard</button>
+        <pre class="codeblock" id="body">start_0:
+_UNDEFINED_83_ 1 // necessary for the first script of the game
+SET_MAP 12
+SET_MAP_TYPE 1 // battle map
+START_MAP
+PLAY_SONG 22
+FADE_MUSIC 100 1 1 // fades the music to max volume in a single frame, effectively setting the volume instantly
+
+// we can use LOAD_CHAR to load characters even if they are not part of formation data
+LOAD_CHAR 2 /*<- character id*/ 0x45 /*<- unit position*/ 0 /*<- facing direction*/ 32 1
+// we can use LOAD_UNIT to move a unit to a different position other than the one defined by formation data
+LOAD_UNIT 23 139 1 3
+
+// move the camera while fading the screen, all at the same time
+run thread
+{
+  CAMERA_MOVE_TO_POS 152 204 1 130
+}
+run thread
+{
+  FADE_SCREEN 19 60 100
+}
+JOIN
+
+/*
+at the same time we show some dialogue, we start a thread that will enable a flag after 4 seconds
+this is something the vanilla game never does, branching execution based on how long you took to read
+if the player goes by at a normal reading pace, they will see nothing special
+however, if the player takes longer, they will see an extra line of dialogue
+*/
+run thread
+{
+  SLEEP 240
+  SET_FLAG 600 1 // if the time is over, set the flag!
+}
+CHAR_TALK 0 2 164
+
+// now, if the flag is set, we play the extra dialogue
+if flag 600
+{
+  CHAR_TALK 1 2 164
+}
+_UNDEFINED_23_ 4 // snowball battle start
+
+start_1:
+SET_FLAG 769 1 // enable pub rumors
+SET_FLAG 1083 1 // make "herb pickings" available
+SET_FLAG 1408 1 // hide "dummy" rumors
+// set other flags that would normally be available by this point
+SET_FLAG 513 1
+SET_FLAG 512 1
+SET_FLAG 595 1
+SET_FLAG 580 1
+SET_FLAG 581 1
+SET_FLAG 768 1
+_UNDEFINED_29_ 3 // set the current script, we are skipping script 2 and going straight to 3
+
+// we can fade the music and the screen at the same time
+run thread
+{
+  FADE_MUSIC 0 60 1 // fade to volume 0 in 1 second
+}
+run thread
+{
+  FADE_SCREEN 49 60 0 // fade to black  in 1 second
+}
+JOIN
+_UNDEFINED_23_ 5 // go to world map
+
+// even though we are not using the other scenes, we need to keep their labels in the script's body
+start_2:
+start_3:
+start_4:
+start_5:
+start_6:
+start_7:
+</pre>
+    </div>
+    <p>Scripts are, in essence, a list of instructions for the game to execute.</p>
+    <p>The script has plenty of comments, but there are some things worth pointing out:</p>
+    <p>Labels are reference points the script can use, they look like: "name:", where name is the label name. For example, "start_0" is the label we are using to mark the start of scene 0. Scripts can also have internal labels, which can only be referenced inside the script, which we can use to keep things more organized. Internal labels look like "$name:", with a $ in front.</p>
+    <p>By using "if (not) flag X { ... }", where "not" is optional and X is the flag number, we can run code conditionally.</p>
+    <p>By using "run thread (X) { ... }", where X is an optional thread group, we can start concurrent execution of a piece of script. By doing this, we can run different things at once, such as making characters pace back and forth while others character talk, or fading the screen and music in and out. With "JOIN", we can make the script wait for threads to complete before continuing, or we can use "JOIN_TAG X" to wait only for threads of group X.</p>
+<p>If you want to modify the units present in the mission, you will need to use one of the already existing tools for that purpose, such as <a target="_blank" href="https://ffhacktics.com/smf/index.php?topic=9764.0", >FFTA Editor: AIO</a> (All in One).</p>
+    <br/>
+    <p>Next, replace Script 1's String 1 and String 2 with the following:</p>
+    <div class="codeblock">
+        <button onclick="copyBlock('string_1')">Copy to Clipboard</button>
+        <pre class="codeblock" id="string_1">Let's fight![A][CLS]</pre>
+    </div>
+    <div class="codeblock">
+        <button onclick="copyBlock('string_2')">Copy to Clipboard</button>
+        <pre class="codeblock" id="string_2">Are you a slow reader?[A][CLS]</pre>
+    </div>
+    <p>Strings are formed by characters (like 'a' and ' ') and control codes ('[A]', '[CLS]').</p>
+    <p>[A] prompts the player to press the A button to continue, while [CLS] clears the textbox.</p>
+    <b>If you are working on a European ROM project, be sure to translate the strings for other languages!</b>
+    <br/>
+    <br/>
+    <p>Finally, replace all the conditionals with the following:</p>
+    <div class="codeblock">
+        <button onclick="copyBlock('conditionals_1')">Copy to Clipboard</button>
+        <pre class="codeblock" id="conditionals_1">start_0:
+END
+</pre>
+    </div>
+    <p>Except for the 'Turn end' conditionals, which will be:</p>
+    <div class="codeblock">
+        <button onclick="copyBlock('conditionals_2')">Copy to Clipboard</button>
+        <pre class="codeblock" id="conditionals_2">start_0:
+START_EVENT 2
+END
+</pre>
+    </div>
+    <p>In this case, the battle will end as soon as the first unit finishes their turn, proceeding to Event 2.</p>
+    <p>Since Event 2 is set to run Script 1 Scene 1, the code after our start_1 label (in the script body) will be executed.</p>
+<hr>
+    <h1 id="4">How to export a project</h1>
+    <p>Once a project is ready for exporting, Build/Build can be selected.</p>
+    <p><img src="2.2.png" alt="The 'Build' option is being selected from the 'Build' option in the menu bar."></p>
+    <p>After selecting the option, two file dialogues may appear:</p>
+    <p>If the original ROM the project was extracted from cannot be found, the first dialogue will appear, prompting the user to locate the base ROM.</p>
+    <p>Once that is done, the user will be prompted to select an output name and location. This path will be saved to the project data, and so it will not be asked again of the user, unless required.</p>
+    <p>If you want to change the base ROM or the output's name, you can select Build/Build As instead.</p>
+    <p>At this point, your exported ROM should have been generated.</p>
+    <p>Remember that FFTA ROMs may not be distributed, as they contain copyrighted materials. In order to share your resulting ROM, create a patch and distribute that instead. This way, and if a proper patch format is used, only data new data will be distributed. There are many tools that can achieve this, but an easy to use one that I recommend is the BPS patch maker in Marc Robledo's <a target="_blank" href="https://www.marcrobledo.com/RomPatcher.js/">Rom Patcher JS</a>'s 'Creator mode'. BPS patches are tiny compared to many other patch formats because it ensures that shifted data (replicated data from the original game, but inserted in a different location) is not directly included in the patch.</p>
+<hr>
+</body>
+</html>

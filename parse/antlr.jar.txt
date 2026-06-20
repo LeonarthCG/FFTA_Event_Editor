@@ -1,0 +1,2 @@
+Add "antlr.jar" to this folder to run the antlr Run Configuration
+The .jar can be found at: https://www.antlr.org/download.html under "ANTLR tool and Java Target"

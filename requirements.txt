@@ -1,0 +1,6 @@
+pyqt6
+pyqt6-sip
+
+antlr4-python3-runtime
+
+Nuitka
